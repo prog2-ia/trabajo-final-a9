@@ -29,4 +29,4 @@ class Artista:
             self.lista_genero[self.genero].append(self) #Si esta se guarda en la lista de su género en el diccionario
             print(f"Artista {self.artista} guardado en {self.genero}")
         else:
-            print("Género no encontrado en la lista.")
+            print("Género no encontrado en la lista.") #No esta el género en la lista
