@@ -1,6 +1,6 @@
 class Pista:
-    def __init__(self, nombre, duracion, genero, artista, featuring, idioma, gentilicio):
-        self.nombre = nombre
+    def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
+        self.cancion = cancion
         self.duracion = duracion
         self.genero = genero
         self.artista = artista
@@ -13,3 +13,16 @@ class Pista:
     def __repr__(self):
         return f'<{self.nombre} {self.duracion} {self. genero} {self.artista} {self.featuring} {self.idioma} {self.gentilicio}>'
 
+    def clasificacion_duracion(self):
+        canciones_segun_duracion= {
+            'Corta': [],
+            'Media': [],
+            'Larga': []
+        }
+        if self.duracion < 3:
+            canciones_segun_duracion['Corta'].append(self.cancion)
+        elif  3 <= self.duracion < 5:
+            canciones_segun_duracion['Media'].append(self.cancion)
+        else:
+            canciones_segun_duracion['Larga'].append(self.cancion)
+        return canciones_segun_duracion
