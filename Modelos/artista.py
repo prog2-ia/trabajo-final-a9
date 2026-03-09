@@ -1,10 +1,11 @@
 class Artista:
-    def __init__(self, genero, artista, gentilicio, edad, antiguedad):
+    def __init__(self, genero, artista, gentilicio, edad, antiguedad, oyentes_mes):
         self.genero = genero
         self.artista = artista
         self.gentilicio = gentilicio
         self.edad = edad
         self.antiguedad = antiguedad
+        self.oyentes_mes = oyentes_mes
 
     def __str__(self):
         return f'Género: {self.genero} - Artista: {self.artista} - Gentilicio: {self.gentilicio} - Edad: {self.edad} - Antiguedad: {self.antiguedad}'

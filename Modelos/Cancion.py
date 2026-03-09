@@ -1,4 +1,4 @@
-class Pista:
+class Cancion:
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
         self.cancion = cancion
         self.duracion = duracion
