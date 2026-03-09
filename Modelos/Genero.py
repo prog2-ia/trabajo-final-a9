@@ -6,7 +6,7 @@ class Genero:
         'Pop': [],
         'Rap': [],
         'Rock': [],
-        'Tecnho': [],
+        'Techno': [],
         'Clásica': [],
         'Jazz': [],
         'Country': []
