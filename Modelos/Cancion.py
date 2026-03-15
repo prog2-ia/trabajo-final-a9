@@ -14,7 +14,7 @@ class Cancion:
     def __repr__(self):
         return f'<Cancion: {self.cancion} | {self.artista} | {self.duracion} min>'
 
-    def clasificacion_duracion(self): #
+    def clasificacion_duracion(self): # Función para clasificar una canción según duración
         if self.duracion < 3:
             return 'Corta'
         elif 3 <= self.duracion < 5:
@@ -22,6 +22,6 @@ class Cancion:
         else:
             return 'Larga'
 
-    def es_colaboracion(self):
+    def es_colaboracion(self): #Función para comprobar si la canción es una colaboración
         # Si featuring no es None, es una colaboración
         return bool(self.featuring)

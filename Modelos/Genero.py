@@ -27,3 +27,13 @@ class Genero:
         else:
             self.lista_genero['Otros'].append(cancion)
         return self.lista_genero
+
+    def obtener_top_generos(self):
+        # Ordena el diccionario basándose en la longitud de las listas de canciones
+        generos_ordenados = sorted(self.lista_genero.items(), key=lambda x: len(x[1]), reverse=True)
+        # Devuelve solo el nombre de los géneros que tienen al menos 1 canción
+        top_generos = []
+        for nombre, lista_cancion in generos_ordenados:
+            if len(lista_cancion) > 0: # Si existe almenos una canción en x género
+                top_generos.append(nombre)
+        return top_generos[:3]
