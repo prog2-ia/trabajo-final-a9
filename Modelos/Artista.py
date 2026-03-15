@@ -49,5 +49,5 @@ class Artista:
             return ArtistaPocoConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
         else:
             return ArtistaConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
-        # Si no, creamos un Artista normal
-        return cls(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
+        # Si no, creamos un Artista conocido
+        return ArtistaConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
