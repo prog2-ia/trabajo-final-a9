@@ -9,7 +9,8 @@ class Genero:
             'Techno': [],
             'Clásica': [],
             'Jazz': [],
-            'Country': []
+            'Country': [],
+            'Otros': []
         }
 
     def __str__(self):
@@ -20,9 +21,9 @@ class Genero:
         return f'<Genero: {len(self.lista_genero)} categorías registradas>'
 
     def clasificar_cancion(self, cancion):
-        # Comprobamos usando el atributo 'genero' del objeto cancion
+        # Si el género existe la cancion se introduce en la lista de género que le corresponde
         if cancion.genero in self.lista_genero:
-            self.lista_genero[cancion.genero].append(cancion.cancion)
-            return (f"Canción '{cancion.cancion}' del artista {cancion.artista} guardada correctamente en {cancion.genero}.")
+            self.lista_genero[cancion.genero].append(cancion)
         else:
-            return(f"Error: El género '{cancion.genero}' no se encuentra en la lista.")
+            self.lista_genero['Otros'].append(cancion)
+        return self.lista_genero

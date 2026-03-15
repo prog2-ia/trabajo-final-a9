@@ -10,7 +10,8 @@ class Artista:
         'Techno': [],
         'Clásica': [],
         'Jazz': [],
-        'Country': []
+        'Country': [],
+        'Otros': []
     }
 
     def __init__(self, genero, artista, gentilicio, edad, antiguedad, oyentes_mes):
@@ -31,7 +32,8 @@ class Artista:
     def clasificar_artista(self):
         if self.genero in Artista.lista_genero:
             Artista.lista_genero[self.genero].append(self.artista)
-
+        else:
+            Artista.lista_genero['Otros'].append(self.artista)
     @classmethod
     def media_oyentes_mens(cls):
         # Evitamos el error de dividir por cero si la lista está vacía
@@ -44,6 +46,8 @@ class Artista:
         media = cls.media_oyentes_mens()
         # Si tiene menos oyentes que la media (y ya hay una media establecida), creamos la clase hija
         if media > 0 and oyentes_mes < media:
-            return Artista_poco_conocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
+            return ArtistaPocoConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
+        else:
+            return ArtistaConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
         # Si no, creamos un Artista normal
         return cls(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)

@@ -4,7 +4,7 @@ class Cancion:
         self.duracion = duracion
         self.genero = genero
         self.artista = artista
-        self.featuring = featuring
+        self.featuring = featuring # En caso de no ser featuring, None o dejar vacío
         self.idioma = idioma
         self.gentilicio = gentilicio
 
@@ -14,10 +14,14 @@ class Cancion:
     def __repr__(self):
         return f'<Cancion: {self.cancion} | {self.artista} | {self.duracion} min>'
 
-    def clasificacion_duracion(self):
+    def clasificacion_duracion(self): #
         if self.duracion < 3:
             return 'Corta'
         elif 3 <= self.duracion < 5:
             return 'Media'
         else:
             return 'Larga'
+
+    def es_colaboracion(self):
+        # Si featuring no es None, es una colaboración
+        return bool(self.featuring)
