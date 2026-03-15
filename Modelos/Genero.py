@@ -1,21 +1,28 @@
 class Genero:
     def __init__(self):
         self.lista_genero = {
-        'Trap': [],
-        'Reggaeton': [],
-        'Pop': [],
-        'Rap': [],
-        'Rock': [],
-        'Techno': [],
-        'Clásica': [],
-        'Jazz': [],
-        'Country': []
+            'Trap': [],
+            'Reggaeton': [],
+            'Pop': [],
+            'Rap': [],
+            'Rock': [],
+            'Techno': [],
+            'Clásica': [],
+            'Jazz': [],
+            'Country': []
         }
 
+    def __str__(self):
+        generos_disponibles = ", ".join(self.lista_genero.keys())
+        return f'Gestor de Géneros Musicales. Categorías: {generos_disponibles}'
+
+    def __repr__(self):
+        return f'<Genero: {len(self.lista_genero)} categorías registradas>'
+
     def clasificar_cancion(self, cancion):
-        # Primero se comprueba si el género del artista está en la lista de géneros
-        if self.genero in self.lista_genero:
-            self.lista_genero[self.genero].append(self) #Si esta se guarda en la lista de su género en el diccionario
-            print(f"Artista {self.artista} guardado en {self.genero}")
+        # Comprobamos usando el atributo 'genero' del objeto cancion
+        if cancion.genero in self.lista_genero:
+            self.lista_genero[cancion.genero].append(cancion.cancion)
+            return (f"Canción '{cancion.cancion}' del artista {cancion.artista} guardada correctamente en {cancion.genero}.")
         else:
-            print("Género no encontrado en la lista.")
+            return(f"Error: El género '{cancion.genero}' no se encuentra en la lista.")

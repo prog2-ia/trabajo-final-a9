@@ -9,20 +9,15 @@ class Cancion:
         self.gentilicio = gentilicio
 
     def __str__(self):
-        return f'Nombre: {self.nombre} - Duracion: {self.duracion} - Genero: {self.genero} - Artista: {self.artista} - Featuring: {self.featuring} - Idioma: {self.Idioma} - Gentilicio: {self.gentilicio}'
+        return f'Nombre: {self.cancion} - Duracion: {self.duracion} min - Genero: {self.genero} - Artista: {self.artista} - Featuring: {self.featuring} - Idioma: {self.idioma}'
+
     def __repr__(self):
-        return f'<{self.nombre} {self.duracion} {self. genero} {self.artista} {self.featuring} {self.idioma} {self.gentilicio}>'
+        return f'<Cancion: {self.cancion} | {self.artista} | {self.duracion} min>'
 
-    def clasificacion_duracion(self): # Función que permite clasificar la duración de cada canción
-        canciones_segun_duracion = {
-            'Corta': [],
-            'Media': [],
-            'Larga': []
-        }
-
+    def clasificacion_duracion(self):
         if self.duracion < 3:
-            canciones_segun_duracion['Corta'].append(self.cancion)
-        elif  3 <= self.duracion < 5:
-            canciones_segun_duracion['Media'].append(self.cancion)
+            return 'Corta'
+        elif 3 <= self.duracion < 5:
+            return 'Media'
         else:
-            canciones_segun_duracion['Larga'].append(self.cancion)
+            return 'Larga'
