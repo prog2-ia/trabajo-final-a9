@@ -1,51 +1,53 @@
 class Cancion:
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
-        self.__cancion = cancion
-        self.__duracion = duracion
-        self.__genero = genero
-        self.__artista = artista
-        self.__featuring = featuring # En caso de no ser featuring, None o dejar vacío
-        self.__idioma = idioma
-        self.__gentilicio = gentilicio
+        self._cancion = cancion
+        self._duracion = duracion
+        self._genero = genero
+        self._artista = artista
+        self._featuring = featuring
+        self._idioma = idioma
+        self._gentilicio = gentilicio
+    # Usamos _ al principio porque no debe tocarse fuera del código de la biblioteca pero debe ser accesible para otras clases como género
 
     def __str__(self):
-        return f'Nombre: {self.__cancion} - Duracion: {self.__duracion} min - Genero: {self.__genero} - Artista: {self.__artista} - Featuring: {self.__featuring} - Idioma: {self.__idioma}'
+        return f'Nombre: {self._cancion} - Duracion: {self._duracion} min - Genero: {self._genero} - Artista: {self._artista} - Featuring: {self._featuring} - Idioma: {self._idioma}'
 
     def __repr__(self):
-        return f'<Cancion: {self.__cancion} | {self.__artista} | {self.__duracion} min>'
+        return f'<Cancion: {self._cancion} | {self._artista} | {self._duracion} min>'
 
+    # Getters actualizados a semi-privados para mayor seguridad
     def get_titulo(self):
-        return self.__cancion
+        return self._cancion
 
     def get_duracion(self):
-        return self.__duracion
+        return self._duracion
 
-    def __hash__(self): # Permite set de dos mismas canciones
-        return hash(self.__cancion)
+    def get_genero(self):
+        return self._genero
 
-    # Eliminar duplicados en un set con canciones del mismo titulo.
-    def __eq__(self, otra_cancion):
+    def __hash__(self): # Permite set de varias canciones del mismo título
+        return hash(self._cancion)
+
+    def __eq__(self, otra_cancion): # Permite eliminar duplicados del mismo título
         if isinstance(otra_cancion, Cancion):
-            return self.__cancion == otra_cancion.get_titulo()
+            return self._cancion == otra_cancion.get_titulo()
         return False
 
     @staticmethod
-    def comprobar_existe_duracion(duracion):
-        if duracion > 0:
-            return True
-        return False
+    def comprobar_existe_duracion(duracion): #Esto sirve como comprobante para clasificarla segun la duracion
+        return duracion > 0
 
     def clasificacion_duracion(self): # Función para clasificar una canción según duración
-        if self.__duracion < 3:
+        if self._duracion < 3:
             return 'Corta'
-        elif 3 <= self.__duracion < 5:
+        elif 3 <= self._duracion < 5:
             return 'Media'
         else:
             return 'Larga'
 
     def es_colaboracion(self): #Función para comprobar si la canción es una colaboración
         # Si featuring no es None, es una colaboración
-        return bool(self.__featuring)
+        return bool(self._featuring)
 
 
 

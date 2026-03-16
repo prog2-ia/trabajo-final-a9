@@ -1,5 +1,5 @@
-from CancionAlegre import CancionAlegre
-from CancionTriste import CancionTriste
+from .CancionAlegre import CancionAlegre
+from .CancionTriste import CancionTriste
 
 class EstadoAnimo:
     def __init__(self, nombre):
@@ -12,15 +12,15 @@ class EstadoAnimo:
     def nombre(self):
         return self.__nombre
 
-    def añadir_cancion(self, cancion):
+    def anyadir_cancion(self, cancion):
         # Usamos isinstance() que devuelve True si el objeto es de esa clase o de alguna de sus superclases
         if isinstance(cancion, CancionAlegre):
             self.__lista_alegres.append(cancion)
-            print(f"Clasificada como ALEGRE: {cancion.cancion}")
+            print(f"Clasificada como ALEGRE: {cancion.get_titulo()}")
 
         elif isinstance(cancion, CancionTriste):
             self.__lista_tristes.append(cancion)
-            print(f"Clasificada como TRISTE: {cancion.cancion}")
+            print(f"Clasificada como TRISTE: {cancion.get_titulo()}")
 
         else:
             print("Es una canción genérica sin estado de ánimo definido.")
@@ -29,7 +29,7 @@ class EstadoAnimo:
         print(f"RESUMEN DE LAS CANCIONES")
         print('*'*25)
         print("CANCIONES PARA SUBIR EL ÁNIMO:")
-        if len(self.__alegres) == 0:
+        if len(self.__lista_alegres) == 0:
             print("Lista vacía, no hay ninguna canción alegre todavía")
         else:
             for cancion in self.__lista_alegres:  # Utilizamos for para recorrer la lista
@@ -37,7 +37,7 @@ class EstadoAnimo:
         print('*' * 25)
 
         print("CANCIONES PARA MOMENTOS TRISTES:")
-        if len(self.__tristes) == 0:
+        if len(self.__lista_tristes) == 0:
             print("Lista vacía, no hay ninguna canción triste todavía")
         else:
             for cancion in self.__lista_tristes:
