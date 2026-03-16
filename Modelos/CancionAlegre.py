@@ -13,4 +13,4 @@ class CancionAlegre(Cancion): # Utilizamos la herencia simple de Cancion
 
     def __str__(self):
         # Uso super para el título de la canción y el artista, lo traigo de la clase padre
-        return f"Canción Alegre: {super().__str__()} | Ritmo: {self.pulsaciones_minuto} BPM"
+        return f"Canción Alegre: {super().__str__()} | Ritmo: {self.__pulsaciones_minuto} BPM"

@@ -21,9 +21,11 @@ class Genero:
         return f'<Genero: {len(self.lista_genero)} categorías registradas>'
 
     def clasificar_cancion(self, cancion):
-        # Si el género existe la cancion se introduce en la lista de género que le corresponde
-        if cancion.genero in self.lista_genero:
-            self.lista_genero[cancion.genero].append(cancion)
+        # Usamos el get para obtener el género de la canción
+        genero_cancion = cancion.get_genero()
+
+        if genero_cancion in self.lista_genero:
+            self.lista_genero[genero_cancion].append(cancion)
         else:
             self.lista_genero['Otros'].append(cancion)
         return self.lista_genero
