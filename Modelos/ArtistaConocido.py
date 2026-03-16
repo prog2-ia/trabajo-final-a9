@@ -1,4 +1,4 @@
-from Artista import Artista
+from .Artista import Artista
 
 class ArtistaConocido(Artista):  # Herencia simple de la clase Artista
     premiosInternacionales = ['Grammy Awards',
