@@ -1,5 +1,6 @@
-from ArtistaConocido import ArtistaConocido
-from ArtistaPocoConocido import ArtistaPocoConocido
+
+from .ArtistaConocido import ArtistaConocido
+from .ArtistaPocoConocido import ArtistaPocoConocido
 
 class Artista:
     lista_oyentes_mens = []

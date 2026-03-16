@@ -1,4 +1,4 @@
-from Cancion import Cancion
+from .Cancion import Cancion
 
 class CancionAlegre(Cancion): # Utilizamos la herencia simple de Cancion
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio, pulsaciones_minuto):

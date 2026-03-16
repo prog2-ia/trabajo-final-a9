@@ -1,5 +1,5 @@
-from CancionAlegre import CancionAlegre
-from CancionTriste import CancionTriste
+from .CancionAlegre import CancionAlegre
+from .CancionTriste import CancionTriste
 
 class EstadoAnimo:
     def __init__(self, nombre):
