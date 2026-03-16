@@ -49,3 +49,6 @@ class Artista:
             return ArtistaPocoConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
         else:
             return ArtistaConocido(genero, artista, gentilicio, edad, antiguedad, oyentes_mes)
+
+    def presentacion_artista(self):
+        return f"Soy {self.artista}, tengo {self.edad} años y si te gusta el {self.genero} has dado con el artista indicado."

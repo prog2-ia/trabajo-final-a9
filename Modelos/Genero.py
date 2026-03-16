@@ -37,3 +37,12 @@ class Genero:
             if len(lista_cancion) > 0: # Si existe almenos una canción en x género
                 top_generos.append(nombre)
         return top_generos[:3]
+
+    def _anyadir_genero(self, genero_nuevo):
+        if genero_nuevo not in self.lista_genero:
+            self.lista_genero[genero_nuevo] = []
+            print(f"Género '{genero_nuevo}' añadido con éxito.")
+        else:
+            print("El género ya existe.")
+
+        return self.lista_genero
