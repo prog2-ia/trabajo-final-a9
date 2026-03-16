@@ -34,10 +34,8 @@ class Cancion:
         return False
 
     @staticmethod
-    def comprobar_existe_duracion(duracion):
-        if duracion > 0:
-            return True
-        return False
+    def comprobar_existe_duracion(duracion): #Esto sirve como comprobante para clasificarla segun la duracion
+        return duracion > 0
 
     def clasificacion_duracion(self): # Función para clasificar una canción según duración
         if self._duracion < 3:
