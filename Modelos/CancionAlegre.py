@@ -7,7 +7,7 @@ class CancionAlegre(Cancion): # Utilizamos la herencia simple de Cancion
         # Definimos las pulsaciones por minuto de la canción ya que es un atriuto exclusivo de esta clase
         self.__pulsaciones_minuto = pulsaciones_minuto
 
-    @property # Convertimos el atributo pulsaciones por minuto en una propiedad
+    @property # Convertimos el atributo pulsaciones por minuto en una propiedad.
     def bpm(self):
         return self.__pulsaciones_minuto
 

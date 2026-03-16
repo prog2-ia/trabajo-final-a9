@@ -41,5 +41,5 @@ class EstadoAnimo:
             print("Lista vacía, no hay ninguna canción triste todavía")
         else:
             for cancion in self.__lista_tristes:
-                print(f"  - {cancion}") # Hacemos un print mostrando el nombre de la CancionTriste
+                print(f"  - {cancion}") # Hacemos un print mostrando el nombre de la CancionTriste.
 
