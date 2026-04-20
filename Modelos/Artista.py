@@ -1,7 +1,4 @@
 
-from .ArtistaConocido import ArtistaConocido
-from .ArtistaPocoConocido import ArtistaPocoConocido
-
 class Artista:
     lista_oyentes_mens = []
 
@@ -47,6 +44,8 @@ class Artista:
 
     @classmethod
     def clasificar_segun_oyentes(cls, genero, artista, gentilicio, edad, antiguedad, oyentes_mes):
+        from .ArtistaConocido import ArtistaConocido
+        from .ArtistaPocoConocido import ArtistaPocoConocido
         media = cls.media_oyentes_mens()
         # Si tiene menos oyentes que la media (y ya hay una media establecida), creamos la clase hija
         if media > 0 and oyentes_mes < media:

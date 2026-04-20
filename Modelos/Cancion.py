@@ -15,14 +15,13 @@ class Cancion:
     def __repr__(self):
         return f'<Cancion: {self._cancion} | {self._artista} | {self._duracion} min>'
 
-    # Getters actualizados a semi-privados para mayor seguridad
-    def get_titulo(self):
-        return self._cancion
+    def obtener_titulo(self):
+        return self._cancion.strip().upper()
 
-    def get_duracion(self):
+    def obtener_duracion(self):
         return self._duracion
 
-    def get_genero(self):
+    def obtener_genero(self):
         return self._genero
 
     def __hash__(self): # Permite set de varias canciones del mismo título
@@ -30,7 +29,7 @@ class Cancion:
 
     def __eq__(self, otra_cancion): # Permite eliminar duplicados del mismo título
         if isinstance(otra_cancion, Cancion):
-            return self._cancion == otra_cancion.get_titulo()
+            return self._cancion.obtener_titulo() == otra_cancion.obtener_titulo()
         return False
 
     @staticmethod

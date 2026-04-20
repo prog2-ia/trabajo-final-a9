@@ -3,19 +3,19 @@ class ListaReproduccion:
         self._nombre = nombre
         self._canciones = []  # Guardaremos los objetos tipo Cancion
 
-    def get_nombre(self):
+    def obtener_nombre(self):
         return self._nombre
 
     def anyadir_cancion(self, cancion): #Añade una canción a la lista
         self._canciones.append(cancion)
 
-    def get_canciones(self): #getter necesario para usar en el add
+    def obtener_canciones(self):
         return self._canciones
 
     def __add__(self, otra_lista): # Combinar dos listas distintas
-        nombre_nueva_lista = f"{self._nombre} y {otra_lista.get_nombre()}" #Nombre de la lista actual y la otra lista de la cual necesitamos su nombre
+        nombre_nueva_lista = f"{self._nombre} y {otra_lista.obtener_nombre()}" #Nombre de la lista actual y la otra lista de la cual necesitamos su nombre
         nueva_lista = ListaReproduccion(nombre_nueva_lista) #El nuevo objeto es una lista con el nuevo nombre
-        nueva_lista._canciones = self._canciones + otra_lista.get_canciones() #La nueva lista es la suma de una lista y la otra
+        nueva_lista._canciones = self._canciones + otra_lista.obtener_canciones() #La nueva lista es la suma de una lista y la otra
 
         return nueva_lista
 
