@@ -27,7 +27,7 @@ class Album:
         # Suma la duración de todas las canciones del álbum y la devuelve
         duracion_total = 0
         for cancion in self._canciones:
-            # Usamos el getter de duración que ya hemos creado anteriormente en el archivo de Cancion
+            # Usamos el getter de duración que ya hemos creado anteriormente en el archivo de Canción
             duracion_total += cancion.get_duracion()
         return duracion_total
 
