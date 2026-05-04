@@ -14,3 +14,10 @@ class CancionTriste(Cancion): # Utilizamos la herencia simple de Cancion
     def __str__(self):
         # Uso super para el título de la canción y el artista, lo traigo de la clase padre
         return f"Canción triste: {super().__str__()} | Motivo: {self.motivo}"
+
+    def reproducir(self):
+        """
+        Implementación del método abstracto de Cancion.
+        Reproduce la canción mostrando el motivo de tristeza.
+        """
+        print(f"▶️ Reproduciendo con melancolía: {self.titulo} (Motivo: {self.motivo})")
