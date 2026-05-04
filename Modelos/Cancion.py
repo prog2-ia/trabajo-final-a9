@@ -1,5 +1,6 @@
 # Hacemos que Cancion herede de ABC, impidiendo que se puedan crear objetos 'Cancion' genéricos
-# HAcemos que 'Cancion' solo sirve para crear otras clases
+# Hacemos que 'Cancion' solo sirve para crear otras clases
+from abc import ABC, abstractmethod
 class Cancion(ABC):
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
         self._cancion = cancion
@@ -49,8 +50,8 @@ class Cancion(ABC):
 # Definimos el método abstracto
 # Cada canción lo va a implementar a su manera por lo que no tiene código
 # Garantiza el polimorfismo en las clases hijas
-@abstractmethod
-def reproducir(self):
-    """Método abstracto que obliga a las hijas a implementarlo"""
-    pass
+    @abstractmethod
+    def reproducir(self):
+        """Método abstracto que obliga a las hijas a implementarlo"""
+        pass
 

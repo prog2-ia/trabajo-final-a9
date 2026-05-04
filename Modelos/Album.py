@@ -6,29 +6,34 @@ class Album:
         self._canciones = []  # Creamos una lista que guarde las canciones
 
     # Definimos los getter de titulo, anyo y artista
-    def get_titulo(self):
+    @property
+    def titulo(self):
         return self._titulo
 
-    def get_anyo(self):
+    @property
+    def anyo(self):
         return self._anyo
 
-    def get_artista(self):
+    @property
+    def artista(self):
         return self._artista
 
+    @property
+    def canciones(self):
+        return self._canciones
+
+# Empezamos a definir los métodos
     def anyadir_cancion(self, cancion):
         # Añade un objeto Cancion a la lista interna del álbum
         self._canciones.append(cancion)
-        print(f"Se ha añadido '{cancion.get_titulo()}' al álbum '{self._titulo}'.")
-
-    def get_canciones(self):
-        return self._canciones
+        print(f"Se ha añadido '{cancion.titulo}' al álbum '{self._titulo}'.")
 
     def calcular_duracion_total(self):
         # Suma la duración de todas las canciones del álbum y la devuelve
         duracion_total = 0
         for cancion in self._canciones:
-            # Usamos el getter de duración que ya hemos creado anteriormente en el archivo de Canción
-            duracion_total += cancion.get_duracion()
+            # Usamos la propiedad de duración
+            duracion_total += cancion.duracion
         return duracion_total
 
     def __str__(self):
