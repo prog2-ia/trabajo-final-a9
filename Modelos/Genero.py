@@ -1,4 +1,6 @@
-class Genero:
+from .Cancion import Cancion
+
+class Genero: #Clase aislada que utiliza objetos de otras clases para  
     def __init__(self):
         self.lista_genero = {
             'Trap': [],
@@ -12,11 +14,14 @@ class Genero:
             'Country': [],
             'Otros': []
         }
+    def clasificar_cancion(self, cancion): #Función para clasificar el genero de una canción y añadirlo a la lista que le corresponde
+        if isinstance(cancion, Cancion): #Si cancion coincide con un objeto de Cancion se cumple la condición
+            if cancion.genero in self.lista_genero: #Se tiene que cumplir que el género de la canción corresponda con alguno del diccionario
+                self.lista_genero[cancion.genero].append(cancion.titulo) #Añadimos el titulo al genero correspondiente
+            else:
+                self.lista_genero['Otros'].append(cancion.titulo) #En caso de que no esté el género en el diccionario, se añadirá a 'otros'
 
-    def clasificar_cancion(self, cancion):
-        # Solución al error: usamos la propiedad .genero
-        gen = cancion.genero if cancion.genero in self.lista_genero else 'Otros'
-        self.lista_genero[gen].append(cancion)
+
 
     def obtener_top_generos(self):
         ordenados = sorted(self.lista_genero.items(), key=lambda x: len(x[1]), reverse=True)

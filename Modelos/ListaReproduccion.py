@@ -8,12 +8,21 @@ class ListaReproduccion:
         return self._nombre
 
     def anyadir_cancion(self, cancion):
-        self._canciones.append(cancion)
+        from .Cancion import Cancion
+        if isinstance(cancion, Cancion):
+            self._canciones.append(cancion)
+        return self
 
-    def __add__(self, otra_lista):
+    def __add__(self, otra_lista): #Fusionar 2 listas de reproducción
         nueva = ListaReproduccion(f"{self._nombre} + {otra_lista.nombre}")
-        nueva._canciones = self._canciones + otra_lista._canciones
-        return nueva
+        nueva._canciones = self._canciones + otra_lista.canciones
+        lista_fusionada = list(dict.fromkeys(nueva._canciones))
+        return lista_fusionada
+
+    def __sub__(self, cancion): #Eliminar una canción de una lista de reproducción
+        if cancion in self._canciones:
+           self._canciones.remove(cancion)
+        return self
 
     def __len__(self): #Función para saber cuantas canciones hay en la playlist
         return len(self._canciones)
