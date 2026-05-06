@@ -42,6 +42,6 @@ El código está organizado de la siguiente manera:
 ├── README.md                 # Documentación técnica
 └── requirements.txt          # Dependencias (pytest)
 ```
-## 👥 Autores
+##  Autores
 * Luis Garcia Arroyo
 * Denís Mora Mas
