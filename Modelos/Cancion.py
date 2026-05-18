@@ -1,8 +1,15 @@
 # Hacemos que Cancion herede de ABC, impidiendo que se puedan crear objetos 'Cancion' genéricos
 # Hacemos que 'Cancion' solo sirve para crear otras clases
 from abc import ABC, abstractmethod
+# Importamos la excepcion personalizada para la validacion de atributos
+from Persistencia.excepciones import ErrorMetadatosErroneos
+
 class Cancion(ABC):
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
+        # Evita registrar canciones con duraciones negativas o nulas
+        if duracion <= 0:
+            raise ErrorMetadatosErroneos("duracion", duracion, "La duracion de la pista musical debe ser un valor positivo")
+
         self._cancion = cancion
         self._duracion = duracion
         self._genero = genero
