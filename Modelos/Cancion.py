@@ -2,7 +2,7 @@
 # Hacemos que 'Cancion' solo sirve para crear otras clases
 from abc import ABC, abstractmethod
 # Importamos la excepcion personalizada para la validacion de atributos
-from Persistencia.excepciones import ErrorMetadatosErroneos
+from Persistencia.Excepciones import ErrorMetadatosErroneos
 
 class Cancion(ABC):
     def __init__(self, cancion, duracion, genero, artista, featuring, idioma, gentilicio):
