@@ -19,7 +19,7 @@ class GestorArchivos:
         modo_escritura_binario = 'wb'
 
         try:
-            # Abrimos el archivo de forma segura. El archivo se cerrará solo al cabar
+            # Abrimos el archivo de forma segura. El archivo se cerrará solo al acabar
             with open(ruta_del_archivo, modo_escritura_binario) as fichero_abierto:
                 # Guardamos la playlist entera dentro del archivo binario
                 pickle.dump(playlist, fichero_abierto)
@@ -53,3 +53,33 @@ class GestorArchivos:
         except (pickle.UnpicklingError, EOFError):
             # Definimos una excepción por si el archivo existe pero se corto o alguien lo modifico y esta dañado
             raise ErrorPistaCorrupta(ruta_del_archivo, "El archivo binario esta corrupto o incompleto")
+
+    @staticmethod
+    def exportar_playlist_texto(playlist, ruta_del_archivo):
+        """Exporta el contenido de la playlist a un archivo de texto legible (.txt). Función útil para usuarios."""
+        # Aseguramos la extensión
+        if not ruta_del_archivo.endswith('.txt'):
+            ruta_del_archivo += '.txt'
+
+        modo_escritura_text = 'w'
+        try:
+            with open(ruta_del_archivo, modo_escritura_text, encoding='utf-8') as fichero_txt:
+                # Cabecera estética
+                fichero_txt.write("=" * 35 + "\n")
+                fichero_txt.write(f" LISTA DE REPRODUCCIÓN: {playlist.nombre}\n")
+                fichero_txt.write(f" TOTAL CANCIONES: {len(playlist)}\n")
+                fichero_txt.write("=" * 35 + "\n\n")
+
+                # Cuerpo del archivo
+                if len(playlist) == 0:
+                    fichero_txt.write("La lista está vacía actualmente.\n")
+                else:
+                    contador = 1
+                    for cancion in playlist:
+                        fichero_txt.write(f"{i}. {cancion.titulo} - Artista: {cancion.artista} ({cancion.duracion} min)\n")
+                        contador += 1
+
+            print(f"Lista exportada a texto en '{ruta_del_archivo}' con éxito.")
+
+        except OSError:
+            raise ErrorRutaRota(ruta_del_archivo, "No se pudo crear el archivo de texto en la ruta indicada")
