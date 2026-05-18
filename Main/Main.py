@@ -1,140 +1,288 @@
-import sys
 import os
+import sys
 
-# Ajuste de ruta para poder importar desde la carpeta "Modelos"
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# Subimos un nivel para encontrar la raíz del proyecto (donde están Modelos y Persistencia)
+ruta_raiz = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(ruta_raiz)
 
-from Modelos.Cancion import Cancion
+# Importaciones de tu modelo
 from Modelos.CancionAlegre import CancionAlegre
 from Modelos.CancionTriste import CancionTriste
 from Modelos.EstadoAnimo import EstadoAnimo
 from Modelos.Genero import Genero
+from Modelos.ListaReproduccion import ListaReproduccion
+from Modelos.Artista import Artista
+from Modelos.ArtistaConocido import ArtistaConocido
+from Modelos.ArtistaPocoConocido import ArtistaPocoConocido
+
+# Importaciones de persistencia y excepciones
+from Persistencia.Excepciones import ErrorMetadatosErroneos, ErrorPistaCorrupta, ErrorRutaRota
+from Persistencia.GestorArchivos import GestorArchivos
+
+FICHERO_BIBLIOTECA = "biblioteca_musical.pkl"
 
 
-def menu_principal():
+def mostrar_menu():
     print("\n" + "=" * 50)
-    print("       SPOTIFY-CLONE: GESTIÓN MUSICAL ")
+    print("        🎵 SPOTIFY-CLONE: GESTOR DE BIBLIOTECA 🎵")
     print("=" * 50)
-    print("1. Añadir nueva canción (Autoclasificación)")
-    print("2. Buscar canciones por Filtros (NUEVO)")
-    print("3. Ver Top Géneros y Estado de Ánimo")
-    print("4. Salir")
+    print(" 1. Ver mi Lista de Reproducción")
+    print(" 2. Añadir nueva canción (Vincular/Crear Artista)")
+    print(" 3. Buscar canciones por filtros")
+    print(" 4. Ver Estadísticas (Top Géneros y Balance de Ánimo)")
+    print(" 5. Demostración de Sobrecarga (Combinar con otra Playlist +)")
+    print(" 6. Ver Clasificaciones Avanzadas (Canciones y Artistas)")
+    print(" 7. Guardar y Salir")
     print("=" * 50)
 
 
-def ejecutar_biblioteca():
-    # Inicializamos nuestros gestores y una lista global para el buscador
+def inicializar_gestores(playlist):
+    """Puebla los gestores y la base de datos de artistas ficticia basándose en la playlist."""
     gestor_generos = Genero()
     mi_mood = EstadoAnimo("Mi Radar de Emociones")
-    biblioteca_global = []
+    base_artistas = {}  # Diccionario: { "nombre_artista": objeto_artista }
 
-    # --- DATOS DE PRUEBA PRECARGADOS ---
-    c1 = CancionAlegre("Levitating", 3.2, "Pop", "Dua Lipa", "DaBaby", "Inglés", "Británica", 103)
-    c2 = CancionTriste("Someone Like You", 4.8, "Pop", "Adele", None, "Inglés", "Británica", "Ruptura")
-    c3 = Cancion("Generic Track", 2.1, "Techno", "DJ Unknown", None, "Inglés", "Alemana")
-    c4 = CancionAlegre("Despacito", 3.8, "Reggaeton", "Luis Fonsi", "Daddy Yankee", "Español", "Puertorriqueño", 89)
+    # Primero poblamos los oyentes para que la media de la clase Artista calcule bien
+    if not Artista.lista_oyentes_mens:
+        Artista.lista_oyentes_mens.extend([500000, 15000000])  # Valores de referencia iniciales
 
-    for c in [c1, c2, c3, c4]:
-        biblioteca_global.append(c)
-        gestor_generos.clasificar_cancion(c)
-        mi_mood.anyadir_cancion(c)
+    # Re-creamos objetos artista para las canciones existentes
+    for cancion in playlist.canciones:
+        gestor_generos.clasificar_cancion(cancion)
+        mi_mood += cancion
 
-    # --- BUCLE PRINCIPAL ---
+        if cancion.artista not in base_artistas:
+            base_artistas[cancion.artista] = ArtistaConocido(
+                cancion.genero, cancion.artista, "Británica", 30, 5, 25000000, ["Grammy Awards"]
+            )
+
+    return gestor_generos, mi_mood, base_artistas
+
+
+def main():
+    print(" Iniciando el sistema y cargando base de datos...")
+    try:
+        playlist_global = GestorArchivos.cargar_playlist(FICHERO_BIBLIOTECA)
+        print(f" Éxito: Se han cargado {len(playlist_global)} canciones guardadas.")
+    except ErrorRutaRota:
+        print("ℹ No se encontró archivo previo. Creando una biblioteca nueva vacía.")
+        playlist_global = ListaReproduccion("Mis Favoritas de Siempre")
+
+        try:
+            c1 = CancionAlegre("Levitating", 3.2, "Pop", "Dua Lipa", "DaBaby", "Inglés", "Británica", 103)
+            c2 = CancionTriste("Someone Like You", 4.5, "Pop", "Adele", None, "Inglés", "Británica", "Ruptura amorosa")
+            playlist_global += c1
+            playlist_global += c2
+        except ErrorMetadatosErroneos:
+            pass
+    except ErrorPistaCorrupta as e:
+        print(f" Alerta: El archivo estaba dañado ({e.detalle}). Iniciando biblioteca vacía.")
+        playlist_global = ListaReproduccion("Mis Favoritas (Recuperada)")
+
+    # Inicializar componentes
+    gestor_generos, mi_mood, base_artistas = inicializar_gestores(playlist_global)
+
     while True:
-        menu_principal()
-        opcion = input("Selecciona una opción (1-4): ")
+        mostrar_menu()
+        opcion = input(" Selecciona una opción (1-7): ").strip()
 
         if opcion == '1':
-            print("\n--- AÑADIR CANCIÓN ---")
-            titulo = input("Título: ")
-            artista = input("Artista: ")
-            gen = input("Género (Pop, Rock, Reggaeton...): ").capitalize()
-
-            try:
-                dur = float(input("Duración en min (ej. 3.5): "))
-            except ValueError:
-                print(" Error: La duración debe ser un número.")
-                continue
-
-            print("\nVamos a analizar la vibra de la canción (Pulsa ENTER para omitir):")
-            bpm = input("Si es alegre, introduce los BPM (ritmo): ")
-
-            # Autoclasificación dinámica basada en el input del usuario
-            if bpm.strip():
-                nueva_cancion = CancionAlegre(titulo, dur, gen, artista, None, "Español", "Desconocido", bpm)
-            else:
-                motivo = input("Si es melancólica, introduce el motivo de tristeza: ")
-                if motivo.strip():
-                    nueva_cancion = CancionTriste(titulo, dur, gen, artista, None, "Español", "Desconocido", motivo)
-                else:
-                    nueva_cancion = Cancion(titulo, dur, gen, artista, None, "Español", "Desconocido")
-
-            # Guardamos en todos los registros
-            biblioteca_global.append(nueva_cancion)
-            gestor_generos.clasificar_cancion(nueva_cancion)
-            mi_mood.anyadir_cancion(nueva_cancion)
-            print(f"\n '{nueva_cancion.titulo}' añadida y clasificada correctamente.")
+            print(f"\n LISTA DE REPRODUCCIÓN: '{playlist_global.nombre}'")
+            print(f"Total: {len(playlist_global)} canciones.")
+            print("-" * 50)
+            if not playlist_global.canciones:
+                print("  (La lista está vacía actualmente)")
+            for i, c in enumerate(playlist_global.canciones, 1):
+                art_obj = base_artistas.get(c.artista)
+                tag_artista = "[Conocido]" if isinstance(art_obj, ArtistaConocido) else "[Emergente]" if art_obj else ""
+                print(f" {i}. {c} {tag_artista}")
 
         elif opcion == '2':
-            print("\n--- BUSCADOR POR FILTROS ---")
-            print(" Deja en blanco (pulsa Enter) los filtros que no quieras usar.")
+            print("\n➕ AÑADIR NUEVA CANCIÓN Y REGISTRAR ARTISTA")
+            titulo = input("Título: ")
+            artista_input = input("Nombre del Artista: ").strip()
+            featuring = input("Featuring (Pulsa ENTER si ninguno): ")
+            featuring = featuring if featuring else None
+            genero_input = input("Género (Pop, Rock, Reggaeton, Techno, etc.): ").strip().capitalize()
+            idioma = input("Idioma: ")
+            gentilicio = input("Gentilicio del artista: ")
 
-            f_gen = input("Filtro de Género (ej. Pop, Reggaeton): ").strip().capitalize()
-            f_dur = input("Filtro de Duración (Corta / Media / Larga): ").strip().capitalize()
-            f_tipo = input("Filtro de Ánimo (Alegre / Triste / Generica): ").strip().capitalize()
+            try:
+                duracion = float(input("Duración en minutos: "))
+            except ValueError:
+                print(" Error: La duración debe ser un número entero o decimal.")
+                continue
 
-            print("\n Resultados de tu búsqueda:")
+            # --- VINCULACIÓN CON LA CLASE ARTISTA ---
+            if artista_input not in base_artistas:
+                print(f"\n🎤 El artista '{artista_input}' no está registrado en el sistema.")
+                print("Por favor, introduce sus datos de perfil para darlo de alta:")
+                try:
+                    edad = int(input("   Edad del artista: "))
+                    antiguedad = int(input("   Años de antigüedad en la música: "))
+                    oyentes = int(input("   Oyentes mensuales en Spotify: "))
+                except ValueError:
+                    print(" Datos numéricos inválidos. Cancelando registro de canción.")
+                    continue
+
+                # La factoría decide automáticamente basándose en la media actual
+                nuevo_artista_obj = Artista.clasificar_segun_oyentes(
+                    genero_input, artista_input, gentilicio, edad, antiguedad, oyentes
+                )
+
+                if isinstance(nuevo_artista_obj, ArtistaConocido):
+                    tiene_premio = input("¿Tiene algún premio internacional importante? (S/N): ").strip().upper()
+                    if tiene_premio == 'S':
+                        print("Premios válidos:", ArtistaConocido.premiosInternacionales)
+                        p = input("Escribe el nombre exacto del premio: ").strip()
+                        nuevo_artista_obj.premios = [p]
+
+                base_artistas[artista_input] = nuevo_artista_obj
+                print(f" Perfil de Artista creado con éxito: {type(nuevo_artista_obj).__name__}")
+
+            tipo_animo = input("\n¿Qué vibra tiene la canción? (1: Alegre / 2: Triste): ").strip()
+
+            try:
+                if tipo_animo == '1':
+                    try:
+                        bpm = int(input("Pulsaciones por minuto (BPM): "))
+                    except ValueError:
+                        bpm = 120
+                    nueva_cancion = CancionAlegre(titulo, duracion, genero_input, artista_input, featuring, idioma,
+                                                  gentilicio, bpm)
+                elif tipo_animo == '2':
+                    motivo = input("Motivo de la tristeza: ")
+                    nueva_cancion = CancionTriste(titulo, duracion, genero_input, artista_input, featuring, idioma,
+                                                  gentilicio, motivo)
+                else:
+                    print(" Error: Debes clasificar el ánimo (1 o 2).")
+                    continue
+
+                playlist_global += nueva_cancion
+                mi_mood += nueva_cancion
+                gestor_generos.clasificar_cancion(nueva_cancion)
+                print(f"🎵 ¡'{nueva_cancion.titulo}' añadida y vinculada correctamente!")
+
+            except ErrorMetadatosErroneos as e:
+                print(f"\n ERROR DE VALIDACIÓN: {e.mensaje}")
+
+        elif opcion == '3':
+            print("\n BUSCADOR CON FILTROS AVANZADOS")
+            print("Deja en blanco (ENTER) si no quieres aplicar un filtro.")
+            f_artista = input("Filtrar por Artista: ").strip().lower()
+            f_genero = input("Filtrar por Género: ").strip().lower()
+            f_tipo = input("Tipo (Alegre / Triste): ").strip().capitalize()
+
+            print("\n RESULTADOS DE LA BÚSQUEDA:")
             resultados = 0
-
-            for c in biblioteca_global:
+            for c in playlist_global.canciones:
                 coincide = True
-
-                # Comprobación de filtros (Si el usuario escribió algo y no coincide, se descarta)
-                if f_gen and c.genero != f_gen:
-                    coincide = False
-
-                # Aquí le damos uso al metodo clasificacion_duracion() que no se usaba
-                if f_dur and c.clasificacion_duracion() != f_dur:
-                    coincide = False
-
+                if f_artista and f_artista not in c.artista.lower(): coincide = False
+                if f_genero and f_genero != c.genero.lower(): coincide = False
                 if f_tipo:
                     if f_tipo == "Alegre" and not isinstance(c, CancionAlegre):
                         coincide = False
                     elif f_tipo == "Triste" and not isinstance(c, CancionTriste):
                         coincide = False
-                    elif f_tipo == "Generica" and (isinstance(c, CancionAlegre) or isinstance(c, CancionTriste)):
-                        coincide = False
 
-                # Si pasó todos los filtros aplicados, la mostramos
                 if coincide:
                     resultados += 1
-                    tipo_str = "Alegre" if isinstance(c, CancionAlegre) else "Triste" if isinstance(c,
-                                                                                                    CancionTriste) else "Genérica"
+                    tipo_str = "Alegre" if isinstance(c, CancionAlegre) else "Triste"
                     print(
                         f" - {c.titulo} | Artista: {c.artista} | Duración: {c.clasificacion_duracion()} ({c.duracion}m) | Ánimo: {tipo_str}")
 
             if resultados == 0:
-                print("No se ha encontrado ninguna canción con esos filtros.")
+                print("No se encontró ninguna canción con esos criterios.")
             else:
-                print(f"\n  Total encontradas: {resultados}")
-
-        elif opcion == '3':
-            print("\n--- ESTADÍSTICAS DE LA BIBLIOTECA ---")
-            print("TOP GÉNEROS:")
-            tops = gestor_generos.obtener_top_generos()
-            for i, g in enumerate(tops, 1):
-                print(f" {i}. {g}")
-
-            print("\n📊 BALANCE DE ÁNIMO:")
-            mi_mood.listado_canciones()
+                print(f"\nTotal encontradas: {resultados}")
 
         elif opcion == '4':
-            print("\nSaliendo del reproductor... ¡Hasta la próxima! 🎵")
-            break
+            print("\n ESTADÍSTICAS DE TU BIBLIOTECA")
+            print("Top 3 Géneros más escuchados:")
+            tops = gestor_generos.obtener_top_generos()
+            if not tops: print("  No hay suficientes géneros registrados todavía.")
+            for i, g in enumerate(tops, 1): print(f"  {i}. {g}")
+            mi_mood.listado_canciones()
 
+        elif opcion == '5':
+            print("\n DEMOSTRACIÓN: SOBRECARGA DEL OPERADOR (+)")
+            playlist_festivales = ListaReproduccion("Hits de Verano")
+            try:
+                c_fest1 = CancionAlegre("Don't Start Now", 3.0, "Pop", "Dua Lipa", None, "Inglés", "Británica", 124)
+                c_fest2 = CancionAlegre("Blinding Lights", 3.3, "Synthwave", "The Weeknd", None, "Inglés", "Canadiense",
+                                        171)
+                playlist_festivales += c_fest1
+                playlist_festivales += c_fest2
+            except ErrorMetadatosErroneos:
+                pass
+
+            playlist_combinada = playlist_global + playlist_festivales
+            print(f"\n ¡Operación realizada con éxito (`+`)!")
+            print(f"Nueva Playlist Resultante: '{playlist_combinada.nombre}'")
+            for i, c in enumerate(playlist_combinada.canciones, 1):
+                print(f"   [{i}] {c.titulo} - {c.artista}")
+
+        elif opcion == '6':
+            print("\n SECCIÓN DE CLASIFICACIONES AVANZADAS")
+            print(" ¿Qué clasificación deseas consultar?")
+            print("  1. Por Duración de Canción")
+            print("  2. Por Estado de Ánimo")
+            print("  3. Por Género Musical")
+            print("  4. Ver Fichas e Informes Reales de ARTISTAS")
+
+            sub_opcion = input("👉 Selecciona un criterio (1-4): ").strip()
+
+            if sub_opcion == '1':
+                print("\n CLASIFICACIÓN POR DURACIÓN:")
+                criterio_duracion = input("Introduce la categoría (Corta / Media / Larga): ").strip().capitalize()
+                print(f"\n Canciones con duración [{criterio_duracion}]:")
+                encontradas = False
+                for c in playlist_global.canciones:
+                    if c.clasificacion_duracion() == criterio_duracion:
+                        print(f"  - {c.titulo} ({c.duracion} min) - {c.artista}")
+                        encontradas = True
+                if not encontradas: print(f"  No se encontraron canciones.")
+
+            elif sub_opcion == '2':
+                mi_mood.listado_canciones()
+
+            elif sub_opcion == '3':
+                print("\n CLASIFICACIÓN COMPLETA POR GÉNERO:")
+                vacio = True
+                for genero_nombre, canciones_en_genero in gestor_generos.lista_genero.items():
+                    if canciones_en_genero:
+                        vacio = False
+                        print(f"\n• Género: {genero_nombre}")
+                        for titulo_cancion in canciones_en_genero: print(f" {titulo_cancion}")
+                if vacio: print("  Aún no hay canciones clasificadas.")
+
+            elif sub_opcion == '4':
+                print("\n BASE DE DATOS DE ARTISTAS DEL SISTEMA:")
+                print(f"Media global de oyentes actuales: {Artista.media_oyentes_mens():,.2f} oyentes/mes\n")
+
+                for nombre, artista_obj in base_artistas.items():
+                    print("-" * 60)
+                    print(artista_obj)
+
+                    if isinstance(artista_obj, ArtistaConocido):
+                        es_internacional = "SÍ " if artista_obj.ser_artista_internacional() else "NO "
+                        print(f" Análisis de Estatus: ¿Es de nivel internacional?: {es_internacional}")
+
+                    elif isinstance(artista_obj, ArtistaPocoConocido):
+                        #  Ejecutamos el nuevo metodo de análisis de rendimiento estadístico en lugar del consejo
+                        print(artista_obj.obtener_analisis_estatus())
+
+        elif opcion == '7':
+            print("\n Guardando biblioteca en disco...")
+            try:
+                GestorArchivos.guardar_playlist(playlist_global, FICHERO_BIBLIOTECA)
+            except ErrorRutaRota as e:
+                print(f" No se pudieron guardar los cambios: {e.mensaje}")
+            print("\n🎵 ¡Gracias por usar Spotify-Clone! ¡Hasta la próxima! ")
+            break
         else:
-            print("\n Opción incorrecta. Introduce un número del 1 al 4.")
+            print(" Opción no válida. Por favor, introduce un número del 1 al 7.")
 
 
 if __name__ == "__main__":
-    ejecutar_biblioteca()
+    main()

@@ -14,15 +14,14 @@ class EstadoAnimo: #Creamos una clase EstadoAnimo gestora y privada entre cancio
     dependiendo de si son alegres, tristes o su estado de 
     ánimo no corresponde con ninguna de las dos
     '''
+
     def __iadd__(self, cancion):
         if isinstance(cancion, CancionAlegre):
             self.__lista_alegres.append(cancion)
-            print(f" Clasificada como ALEGRE: {cancion.titulo}")
         elif isinstance(cancion, CancionTriste):
             self.__lista_tristes.append(cancion)
-            print(f" Clasificada como TRISTE: {cancion.titulo}")
-        else:
-            print("Neutral: Sin estado de ánimo definido.")
+
+        return self
 
     def listado_canciones(self): #Función que devuelve la lista de canciones alegres y tristes
         print(f"\n--- ESTADO DE ÁNIMO: {self.__nombre} ---")

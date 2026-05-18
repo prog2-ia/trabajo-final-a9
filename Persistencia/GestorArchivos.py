@@ -1,7 +1,7 @@
 # Implementamos una herecia sobre excepciones y añadimos pickle
 
 import pickle
-from Excepciones import ErrorRutaRota, ErrorPistaCorrupta
+from .Excepciones import ErrorRutaRota, ErrorPistaCorrupta
 
 
 class GestorArchivos:
@@ -64,6 +64,7 @@ class GestorArchivos:
         modo_escritura_text = 'w'
         try:
             with open(ruta_del_archivo, modo_escritura_text, encoding='utf-8') as fichero_txt:
+                # encoding utf-8 permite que se exporte bien en idioma español, por ejemplo palabras con acentos
                 # Cabecera estética
                 fichero_txt.write("=" * 35 + "\n")
                 fichero_txt.write(f" LISTA DE REPRODUCCIÓN: {playlist.nombre}\n")
@@ -75,8 +76,8 @@ class GestorArchivos:
                     fichero_txt.write("La lista está vacía actualmente.\n")
                 else:
                     contador = 1
-                    for cancion in playlist:
-                        fichero_txt.write(f"{i}. {cancion.titulo} - Artista: {cancion.artista} ({cancion.duracion} min)\n")
+                    for cancion in playlist.canciones:
+                        fichero_txt.write(f"{contador}. {cancion.titulo} - Artista: {cancion.artista} ({cancion.duracion} min)\n")
                         contador += 1
 
             print(f"Lista exportada a texto en '{ruta_del_archivo}' con éxito.")
