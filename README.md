@@ -44,6 +44,7 @@ El código está organizado de la siguiente manera:
 ├── UI/
 │   └── __init__.py
 └── README.md                 # Documentación técnica
+└── requirements.txt
 ```
 ##  Autores
 * Luis Garcia Arroyo

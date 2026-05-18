@@ -1,0 +1,4 @@
+# CComponentes utilizados
+# - abc : Usado en 'Cancion.py' para Clases Abstractas y @abstractmethod
+# - pickle : Usado en 'GestorArchivos.py' para la persistencia binaria
+# No hemos utilizado ninguna bibleria
