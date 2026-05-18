@@ -17,7 +17,7 @@ class CancionTriste(Cancion): # Utilizamos la herencia simple de Cancion
 
     def reproducir(self):
         """
-        Implementación del método abstracto de Cancion.
+        Implementación del metodo abstracto de Cancion.
         Reproduce la canción mostrando el motivo de tristeza.
         """
-        print(f"▶️ Reproduciendo con melancolía: {self.titulo} (Motivo: {self.motivo})")
+        print(f" Reproduciendo con melancolía: {self.titulo} (Motivo: {self.motivo})")

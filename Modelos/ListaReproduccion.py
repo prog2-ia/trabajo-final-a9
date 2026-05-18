@@ -12,7 +12,8 @@ class ListaReproduccion:
         # Añadimos este getter para que otra lista pueda leer nuestras canciones al sumar
         return self._canciones
 
-    def anyadir_cancion(self, cancion_nueva):
+    #Función con la que podemos añadir canciones a nuestra playlist
+    def __iadd__(self, cancion_nueva):
         from .Cancion import Cancion
         if isinstance(cancion_nueva, Cancion):
             if cancion_nueva not in self._canciones:
@@ -26,8 +27,9 @@ class ListaReproduccion:
 
         # Juntamos las canciones y utilizamos un bucle para eliminar posibles duplicados
         canciones_sin_repetir = []
+        canciones = self._canciones + otra_lista.canciones
 
-        for cancion_actual in self._canciones:
+        for cancion_actual in canciones:
             if cancion_actual not in canciones_sin_repetir:
                 canciones_sin_repetir.append(cancion_actual)
 

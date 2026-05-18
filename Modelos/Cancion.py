@@ -54,10 +54,10 @@ class Cancion(ABC):
         elif 3 <= self._duracion < 5: return 'Media'
         return 'Larga'
 
-# Definimos el método abstracto
+# Definimos el metodo abstracto
 # Cada canción lo va a implementar a su manera por lo que no tiene código
 # Garantiza el polimorfismo en las clases hijas
     @abstractmethod
     def reproducir(self):
-        """Método abstracto que obliga a las hijas a implementarlo"""
+        """Metodo abstracto que obliga a las hijas a implementarlo"""
         pass

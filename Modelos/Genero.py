@@ -14,13 +14,18 @@ class Genero: #Clase aislada que utiliza objetos de otras clases para
             'Country': [],
             'Otros': []
         }
-    def clasificar_cancion(self, cancion): #Función para clasificar el genero de una canción y añadirlo a la lista que le corresponde
+
+    '''
+    Función para clasificar el genero de una canción y añadirlo a la lista
+    que le corresponda. Para ello el genero de la canción corresponderá con una de 
+    las keys del diccionario lista_genero. En caso contrario, se enviará a 'Otros'.
+    '''
+    def clasificar_cancion(self, cancion):
         if isinstance(cancion, Cancion): #Si cancion coincide con un objeto de Cancion se cumple la condición
-            if cancion.genero in self.lista_genero: #Se tiene que cumplir que el género de la canción corresponda con alguno del diccionario
+            if cancion.genero in self.lista_genero:
                 self.lista_genero[cancion.genero].append(cancion.titulo) #Añadimos el titulo al genero correspondiente
             else:
-                self.lista_genero['Otros'].append(cancion.titulo) #En caso de que no esté el género en el diccionario, se añadirá a 'otros'
-
+                self.lista_genero['Otros'].append(cancion.titulo)
 
 
     def obtener_top_generos(self):
